@@ -5,16 +5,19 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
-    private static final long START_TIME_IN_MILLIS = 30000;
+    private static final long START_TIME_IN_MILLIS = 5000;
 
     private TextView mTextViewCountDown;
     private Button mButtonStartPause;
     private Button mButtonReset;
+    private ProgressBar mProgressBar;
 
     private CountDownTimer mCountDownTimer;
 
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         mButtonStartPause = findViewById(R.id.button_start_pause);
         mButtonReset = findViewById(R.id.button_reset);
+        mProgressBar = findViewById(R.id.progressBar);
 
         mButtonStartPause.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillis = millisUntilFinished;
                 updateCountDownText();
+
             }
+
 
             @Override
             public void onFinish() {
@@ -73,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         mButtonStartPause.setText("pause");
         mButtonReset.setVisibility(View.INVISIBLE);
     }
+
+
 
     private void pauseTimer() {
         mCountDownTimer.cancel();
@@ -89,11 +97,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateCountDownText() {
+
         int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
         int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
 
         String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
-
+        mProgressBar.setProgress((int)mTimeLeftInMillis);
         mTextViewCountDown.setText(timeLeftFormatted);
+
     }
 }
